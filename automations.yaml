@@ -1,13 +1,127 @@
-# Beispiel-Automatisierung für ein Repository
-- alias: "Benachrichtigung bei offenem Fenster"
-  trigger:
-    - platform: state
-      entity_id: binary_sensor.fenster_wohnzimmer
-      to: "on"
+# ==============================================================================
+# AUTOMATION 1: Wandpaneel Batteriesteuerung (Smart Charging 20-80%)
+# ==============================================================================
+- id: 'wandpaneel_ladevorgang_steuerung'
+  alias: 'Wandpaneel - Intelligentes Laden'
+  description: 'Hält den Akku des Wand-Tablets zwischen 20% und 80%, um die Lebensdauer zu verlängern.'
+  triggers:
+    - trigger: numeric_state
+      entity_id: sensor.wallpanel_battery
+      below: 20
+      id: start_charging
+    - trigger: numeric_state
+      entity_id: sensor.wallpanel_battery
+      above: 80
+      id: stop_charging
+  conditions: []
+  actions:
+    - choose:
+        - conditions:
+            - condition: trigger
+              id: start_charging
+          actions:
+            - action: switch.turn_on
+              target:
+                entity_id: switch.wallpanel_charger_plug
+        - conditions:
+            - condition: trigger
+              id: stop_charging
+          actions:
+            - action: switch.turn_off
+              target:
+                entity_id: switch.wallpanel_charger_plug
+  mode: single
+
+# ==============================================================================
+# AUTOMATION 2: Bewegungsmelder Bad (Blueprint-Nutzung)
+# ==============================================================================
+- id: 'badezimmer_bewegungsmelder_blueprint'
+  alias: 'Badezimmer - Bewegungsmeldung (Blueprint)'
+  description: 'Dynamisches Licht im Badezimmer basierend auf Bewegung.'
+  use_blueprint:
+    path: networkingcat/yet_another_motion_automation.yaml
+    input:
+      motion_entity: binary_sensor.motion_sensor_bathroom
+      light_target:
+        entity_id: light.bathroom_light
+      no_motion_wait: 30
+
+# ==============================================================================
+# AUTOMATION 3: Badezimmer Beleuchtung (Präsenz & Lux-Grenzwerte)
+# ==============================================================================
+- id: 'badezimmer_licht_an_bewegung'
+  alias: 'Badezimmer - Licht automatisch AN'
+  description: 'Schaltet Licht ein, wenn Präsenz erkannt wird und Helligkeit unter 30 Lux liegt.'
+  triggers:
+    - trigger: state
+      entity_id: binary_sensor.presence_sensor_bathroom
+      to: 'on'
       for:
-        minutes: 10
-  action:
-    - action: notify.notify
-      data:
-        title: "Fenster-Warnung"
-        message: "Das Wohnzimmerfenster ist seit 10 Minuten offen!"
+        seconds: 1
+  conditions:
+    - condition: sun
+      after: sunset
+      after_offset: '-01:00:00'
+      before: sunrise
+      before_offset: '01:00:00'
+    - condition: numeric_state
+      entity_id: sensor.illuminance_sensor_bathroom
+      below: 30
+  actions:
+    - action: switch.turn_on
+      target:
+        entity_id: switch.bathroom_light_switch
+  mode: single
+
+- id: 'badezimmer_licht_aus_bewegung'
+  alias: 'Badezimmer - Licht automatisch AUS'
+  description: 'Schaltet Licht nach 30 Sekunden ohne Präsenz aus.'
+  triggers:
+    - trigger: state
+      entity_id: binary_sensor.presence_sensor_bathroom
+      to: 'off'
+      for:
+        seconds: 30
+  actions:
+    - action: switch.turn_off
+      target:
+        entity_id: switch.bathroom_light_switch
+  mode: single
+
+# ==============================================================================
+# AUTOMATION 4: Flur / Gang Beleuchtung
+# ==============================================================================
+- id: 'flur_licht_an_bewegung'
+  alias: 'Flur - Licht automatisch AN'
+  description: 'Schaltet Licht im Flur nach Sonnenuntergang bei Präsenz ein.'
+  triggers:
+    - trigger: state
+      entity_id: binary_sensor.presence_sensor_hallway
+      to: 'on'
+  conditions:
+    - condition: sun
+      after: sunset
+      after_offset: '-01:00:00'
+      before: sunrise
+      before_offset: '-01:00:00'
+  actions:
+    - action: switch.turn_on
+      target:
+        entity_id: switch.hallway_light_switch
+  mode: single
+
+- id: 'flur_licht_aus_bewegung'
+  alias: 'Flur - Licht automatisch AUS'
+  description: 'Schaltet Flurlicht nach 30 Sekunden Inaktivität aus.'
+  triggers:
+    - trigger: state
+      entity_id: binary_sensor.presence_sensor_hallway
+      to: 'off'
+      for:
+        seconds: 30
+  conditions: []
+  actions:
+    - action: switch.turn_off
+      target:
+        entity_id: switch.hallway_light_switch
+  mode: single
