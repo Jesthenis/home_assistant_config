@@ -16,4 +16,4 @@ Willkommen in meinem Repository für meine Home-Assistant-Infrastruktur. Hier do
 Aus Sicherheitsgründen sind alle IP-Adressen, API-Keys, Passwörter und Geodaten aus diesem Repository entfernt und in eine nicht-öffentliche `secrets.yaml` ausgelagert.
 
 ## 🖥 Wallpanel Dashboard
-![Wallpanel Screenshot](Dashboard_Wallpanel_Anfang)
+![Wallpanel Screenshot](Dashboard_Wallpanel_Anfang.jpg)
