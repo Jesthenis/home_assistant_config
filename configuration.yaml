@@ -1,0 +1,32 @@
+# ==============================================================================
+# HOME ASSISTANT MAIN CONFIGURATION
+# ==============================================================================
+
+homeassistant:
+  packages: !include_dir_named packages
+
+# Loads default set of integrations. Do not remove.
+default_config:
+
+# Load frontend themes from the themes folder
+frontend:
+  themes: !include_dir_merge_named themes
+
+automation: !include automations.yaml
+script: !include scripts.yaml
+scene: !include scenes.yaml
+
+template:
+  - sensor:
+      - name: "Offline Geraete Zaehler"
+        unique_id: offline_geraete_zaehler
+        icon: mdi:wifi-off
+        state: >
+          {{ states.light | selectattr('state', 'eq', 'unavailable') | list | count +
+             states.switch | selectattr('state', 'eq', 'unavailable') | list | count +
+             states.binary_sensor | selectattr('state', 'eq', 'unavailable') | list | count }}
+
+logger:
+  default: warning
+  logs:
+    homeassistant.components.automation: info
