@@ -1,0 +1,13 @@
+# Beispiel-Automatisierung für ein Repository
+- alias: "Benachrichtigung bei offenem Fenster"
+  trigger:
+    - platform: state
+      entity_id: binary_sensor.fenster_wohnzimmer
+      to: "on"
+      for:
+        minutes: 10
+  action:
+    - action: notify.notify
+      data:
+        title: "Fenster-Warnung"
+        message: "Das Wohnzimmerfenster ist seit 10 Minuten offen!"
