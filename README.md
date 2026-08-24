@@ -17,9 +17,11 @@ Willkommen in meinem Repository für meine Home-Assistant-Infrastruktur. Hier do
 * **Wallpanel:** Amazon Fire HD 8 via Fully Kiosk Browser & Kiosk Mode
 
 ## 📁 Repository-Struktur
-* `automations.yaml` – Logiken, Trigger und Bedingungen für Smart-Home-Abläufe
-* `secrets.yaml.example` – Vorlage für Umgebungsvariablen und Platzhalter
-* `.gitignore` – Ausschlussfilter für sensible Systemdaten und Token
+
+* **`automations.yaml`** – Logiken, Trigger und Bedingungen für Smart-Home-Abläufe
+* **`configuration.yaml`** – Haupteinstellungen, Systeminfrastruktur, Logging und Custom Sensors
+* **`secrets.yaml.example`** – Vorlage für Umgebungsvariablen und Platzhalter
+* **`.gitignore`** – Ausschlussfilter für sensible Systemdaten und Token
 
 ## 🔒 Datenschutz & Sicherheit
 Aus Sicherheitsgründen sind alle IP-Adressen, API-Keys, Passwörter und Geodaten aus diesem Repository entfernt und in eine nicht-öffentliche `secrets.yaml` ausgelagert.
