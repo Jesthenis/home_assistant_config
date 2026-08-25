@@ -26,7 +26,7 @@ Willkommen in meinem Repository für meine Home-Assistant-Infrastruktur. Hier do
 * **Sensorik & Umweltdaten:** Zigbee- & Homematic IP-Sensoren für Temperatur, Luftfeuchtigkeit, Bewegung und Tür-/Fensterkontakte
 * **Beleuchtung & Custom Hardware:** 
   * Zigbee-Leuchtmittel & Smart Plugs zur Energiemessung
-  * **Custom Ambient Lighting:** 24V RGBIC COB-LED-Installation mit digitaler Segmentsteuerung (SPI) via Tuya Zigbee Controller (WZ-SPI) & 2.4G RF Remote
+  * **Custom Ambient Lighting:** 24V RGBIC COB-LED-Installation mit digitaler Segmentsteuerung (SPI) via Tuya Zigbee Controller (WZ-SPI)     & 2.4G RF Remote
 * **Smart Audio & Voice:** Multiroom-Setup mit 7 Amazon Echo-Geräten (Echo Dot bis Echo Show 8) via Alexa Media Player (TTS-Ankündigungen, Audio-Routing & Smart-Home-Steuerung)
 
 ## 📁 Repository-Struktur
