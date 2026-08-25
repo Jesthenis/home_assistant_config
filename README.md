@@ -60,7 +60,18 @@ graph TD
         Dongle -.- ZigbeeSensors[Motion & Temp Sensors, Smart Bulbs]
     end
 ```
+end
 
+## 🔒 Sicherheits- & Netzwerk-Roadmap (Soll-Konzept)
+
+Aktuell betreiben wir die Wi-Fi-IoT-Geräte in einem flachen Layer-2-Netzwerk über getrennte SSIDs. Die schrittweise Härtung und Segmentierung erfolgt nach folgendem Schema:
+
+* **VLAN-Isolation (VLAN 30):** Physische und logische Trennung aller kabelgebundenen und drahtlosen IoT-Komponenten vom Haupt- und Managementnetzwerk via TP-Link Omada.
+* **Multicast-Routing (mDNS Reflector):** Aktivierung von mDNS-Relaying im Omada-Controller, um Dienst-Erkennung (z. B. Home Assistant Discovery, Google Cast, HomeKit) über Subnetzgrenzen hinweg zu ermöglichen.
+* **Stateful Firewall Rules:**
+  * **ALLOW:** Traffic-Initialisierung von Management/HA in Richtung IoT-VLAN (inkl. Antwort-Paketen).
+  * **DENY:** Unsolicited Traffic / Initiativer Verbindungsaufbau aus dem IoT-VLAN zurück ins Haupt- oder Managementnetzwerk wird strikt verworfen.
+  
 ## 🎛️ Integriertes Geräte-Ökosystem & Protokolle
 
 * **Smart Home Standards & Protokolle:** Zigbee 3.0, Homematic IP (868 MHz), Wi-Fi (2.4 / 5 GHz), Matter / Thread
