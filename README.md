@@ -55,7 +55,8 @@ graph TD
 
     subgraph Zigbee_RF ["Zigbee Mesh (2.4 GHz)"]
         Dongle -.- ZigbeeSensors[Motion & Temp Sensors, Smart Bulbs]
-    end
+    end```
+
 
 ## 🎛️ Integriertes Geräte-Ökosystem & Protokolle
 
