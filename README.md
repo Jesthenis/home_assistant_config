@@ -16,7 +16,7 @@ Willkommen in meinem Repository für meine Home-Assistant-Infrastruktur. Hier do
   * **Netzwerk-Segmentierung:** Dedizierte VLANs für IoT-Geräte und Smart-Home-Komponenten
 * **Wallpanel:** Amazon Fire HD 8 via Fully Kiosk Browser & Kiosk Mode
 
-* **🌐 Netzwerk & Infrastruktur:**
+## 🌐 Netzwerk & Infrastruktur:**
   
   * **Router / Modem:** Telekom Speedport Smart 4 Plus (Glasfaser)
   * **Switch:** TP-Link Omada ES205G (Managed Switch)
