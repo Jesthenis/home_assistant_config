@@ -9,21 +9,16 @@ Willkommen in meinem Repository für meine Home-Assistant-Infrastruktur. Hier do
   * **Arbeitsspeicher:** 16 GB DDR4 RAM (2x 8 GB Samsung Dual-Channel)
   * **Speicher:** 256 GB M.2 SATA SSD (Aufgerüstet)
 * **Betriebssystem:** Home Assistant OS (HAOS) – Native Bare-Metal Installation
-* **Netzwerk & Infrastruktur:**
-  * **Router / Modem:** Telekom Speedport Smart 4 Plus (Glasfaser)
-  * **Switch:** TP-Link Omada SG105E / ES205G (Managed Switch)
-  * **Network Management:** TP-Link Omada Controller (gehostet als Add-on auf HAOS)
-  * **Netzwerk-Segmentierung:** Dedizierte VLANs für IoT-Geräte und Smart-Home-Komponenten
-* **Wallpanel:** Amazon Fire HD 8 via Fully Kiosk Browser & Kiosk Mode
+* **Kiosk / Display:** Amazon Fire HD 8 via Fully Kiosk Browser & Kiosk Mode
 
-## 🌐 Netzwerk & Infrastruktur:**
-  
-  * **Router / Modem:** Telekom Speedport Smart 4 Plus (Glasfaser)
-  * **Switch:** TP-Link Omada ES205G (Managed Switch)
-  * **Access Point:** TP-Link Omada EAP650 (Wi-Fi 6)
-  * **Network Management:** TP-Link Omada Controller (gehostet als Add-on auf HAOS)
-  * **Netzwerk-Segmentierung:** Dedizierte VLANs für IoT-Geräte und Smart-Home-Komponenten
- 
+## 🌐 Netzwerk & Infrastruktur
+
+* **Router / Modem:** Telekom Speedport Smart 4 Plus (Glasfaser)
+* **Switch:** TP-Link Omada ES205G (Managed Switch)
+* **Access Point:** TP-Link Omada EAP650 (Wi-Fi 6)
+* **Network Management:** TP-Link Omada Controller (gehostet als Add-on auf HAOS)
+* **Netzwerk-Segmentierung:** Dedizierte VLANs für IoT-Geräte und Smart-Home-Komponenten
+
 ## 🎛️ Integriertes Geräte-Ökosystem & Protokolle
 
 * **Smart Home Standards & Protokolle:** Zigbee 3.0, Homematic IP (868 MHz), Wi-Fi (2.4 / 5 GHz), Matter / Thread
@@ -33,7 +28,6 @@ Willkommen in meinem Repository für meine Home-Assistant-Infrastruktur. Hier do
   * Zigbee-Leuchtmittel & Smart Plugs zur Energiemessung
   * **Custom Ambient Lighting:** 24V RGBIC COB-LED-Installation mit digitaler Segmentsteuerung (SPI) via Tuya Zigbee Controller (WZ-SPI) & 2.4G RF Remote
 * **Smart Audio & Voice:** Multiroom-Setup mit 7 Amazon Echo-Geräten (Echo Dot bis Echo Show 8) via Alexa Media Player (TTS-Ankündigungen, Audio-Routing & Smart-Home-Steuerung)
-* **Kiosk & Dashboard:** Amazon Fire HD 8 (Fully Kiosk Integration für Echtzeit-Statusanzeige)
 
 ## 📁 Repository-Struktur
 
