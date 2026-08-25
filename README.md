@@ -20,6 +20,7 @@ Willkommen in meinem Repository für meine Home-Assistant-Infrastruktur. Hier do
 * **Netzwerk-Segmentierung:** Dedizierte VLANs für IoT-Geräte und Smart-Home-Komponenten
 
 ### 📊 Netzwerktopologie (Ist-Zustand)
+
 ```mermaid
 graph TD
     Router[ISP Router / Gateway] <--> Switch[Managed Switch / TP-Link Omada]
@@ -55,8 +56,8 @@ graph TD
 
     subgraph Zigbee_RF ["Zigbee Mesh (2.4 GHz)"]
         Dongle -.- ZigbeeSensors[Motion & Temp Sensors, Smart Bulbs]
-    end```
-
+    end
+```
 
 ## 🎛️ Integriertes Geräte-Ökosystem & Protokolle
 
