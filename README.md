@@ -60,7 +60,6 @@ graph TD
         Dongle -.- ZigbeeSensors[Motion & Temp Sensors, Smart Bulbs]
     end
 ```
-end
 
 ## 🔒 Sicherheits- & Netzwerk-Roadmap (Soll-Konzept)
 
