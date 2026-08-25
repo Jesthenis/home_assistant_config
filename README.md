@@ -26,11 +26,13 @@ graph TD
     Router[ISP Router / Gateway] <--> Switch[Managed Switch / TP-Link Omada]
     Switch <--> AP[Wi-Fi 6 Access Point / TP-Link EAP650]
 
+    Router --- HA[Home Assistant Host / Dell Wyse 5070]
+    Router --- PC1[Workstation / Gaming PC]
+
     subgraph LAN ["Kabelgebundene Geräte (LAN Segment)"]
-        Switch --- HA[Home Assistant Host / Dell Wyse 5070]
-        HA --- Dongle[Zigbee / Matter USB Controller]
+        HA --- Dongle[Sonoff Zigbee Dongle]
+        Switch --- Matter_Hub[Matter Hub]
         Switch --- HMIP_GW[Homematic IP Access Point]
-        Switch --- PC1[Workstation / Gaming PC]
         Switch --- TV[Smart TV / Living Room]
     end
 
