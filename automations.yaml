@@ -1,127 +1,164 @@
 # ==============================================================================
-# AUTOMATION 1: Wandpaneel Batteriesteuerung (Smart Charging 20-80%)
+# BADEZIMMER LICHTAUTOMATIK
+# Steuert die Beleuchtung basierend auf Bewegung, Sonnenstand und Raumhelligkeit.
+# Fasst Ein- und Ausschalten durch Trigger-IDs in einer Automation zusammen.
 # ==============================================================================
-- id: 'wandpaneel_ladevorgang_steuerung'
-  alias: 'Wandpaneel - Intelligentes Laden'
-  description: 'Hält den Akku des Wand-Tablets zwischen 20% und 80%, um die Lebensdauer zu verlängern.'
+- id: 'badezimmer_lichtautomatik'
+  alias: Badezimmer_Lichtautomatik
+  description: 'Automatische Lichtsteuerung Bad (Bewegung, Sonne, Lux)'
   triggers:
-    - trigger: numeric_state
-      entity_id: sensor.wallpanel_battery
-      below: 20
-      id: start_charging
-    - trigger: numeric_state
-      entity_id: sensor.wallpanel_battery
-      above: 80
-      id: stop_charging
+  # --- AUSLÖSER 1: Bewegung erkannt ---
+  - trigger: motion.detected
+    target:
+      device_id: [DEVICE_ID_BEWEGUNGSMELDER_BAD]
+    options:
+      behavior: each
+    id: motion_on
+  # --- AUSLÖSER 2: Keine Bewegung mehr ---
+  - trigger: motion.cleared
+    target:
+      device_id: [DEVICE_ID_BEWEGUNGSMELDER_BAD]
+    options:
+      behavior: each
+      for:
+        hours: 0
+        minutes: 0
+        seconds: 30 # Verzögerung, um unnötiges Schalten zu verhindern
+    id: motion_off
   conditions: []
   actions:
-    - choose:
-        - conditions:
-            - condition: trigger
-              id: start_charging
-          actions:
-            - action: switch.turn_on
-              target:
-                entity_id: switch.wallpanel_charger_plug
-        - conditions:
-            - condition: trigger
-              id: stop_charging
-          actions:
-            - action: switch.turn_off
-              target:
-                entity_id: switch.wallpanel_charger_plug
+  - choose:
+    # --- OPTION 1: Einschalten (nur bei Dunkelheit) ---
+    - conditions:
+      - condition: sun.is_set
+        options: {}
+      - condition: illuminance.is_value
+        target:
+          device_id: [DEVICE_ID_LICHTSENSOR_BAD]
+        options:
+          behavior: any
+          threshold:
+            type: below
+            value:
+              active_choice: number
+              number: 30 # Schwellenwert: Licht geht nur an, wenn es dunkler als 30 Lux ist
+      - condition: trigger
+        id:
+        - motion_on
+      sequence:
+      - action: switch.turn_on
+        metadata: {}
+        target:
+          device_id: [DEVICE_ID_LICHTSCHALTER_BAD]
+        data: {}
+    # --- OPTION 2: Ausschalten (unabhängig von Helligkeit) ---
+    - conditions:
+      - condition: trigger
+        id:
+        - motion_off
+      sequence:
+      - action: switch.turn_off
+        metadata: {}
+        target:
+          device_id: [DEVICE_ID_LICHTSCHALTER_BAD]
+        data: {}
   mode: single
 
 # ==============================================================================
-# AUTOMATION 2: Bewegungsmelder Bad (Blueprint-Nutzung)
+# GANG LICHTAUTOMATIK
+# Schaltet das Licht im Flur nach Sonnenuntergang bei Präsenz ein.
 # ==============================================================================
-- id: 'badezimmer_bewegungsmelder_blueprint'
-  alias: 'Badezimmer - Bewegungsmeldung (Blueprint)'
-  description: 'Dynamisches Licht im Badezimmer basierend auf Bewegung.'
-  use_blueprint:
-    path: networkingcat/yet_another_motion_automation.yaml
-    input:
-      motion_entity: binary_sensor.motion_sensor_bathroom
-      light_target:
-        entity_id: light.bathroom_light
-      no_motion_wait: 30
-
-# ==============================================================================
-# AUTOMATION 3: Badezimmer Beleuchtung (Präsenz & Lux-Grenzwerte)
-# ==============================================================================
-- id: 'badezimmer_licht_an_bewegung'
-  alias: 'Badezimmer - Licht automatisch AN'
-  description: 'Schaltet Licht ein, wenn Präsenz erkannt wird und Helligkeit unter 30 Lux liegt.'
+- id: 'gang_lichtautomatik'
+  alias: Gang_Lichtautomation
+  description: 'Automatische Lichtsteuerung Flur (Bewegung, Sonne)'
   triggers:
-    - trigger: state
-      entity_id: binary_sensor.presence_sensor_bathroom
-      to: 'on'
+  - trigger: motion.detected
+    target:
+      device_id: [DEVICE_ID_BEWEGUNGSMELDER_GANG]
+    options:
+      behavior: each
+    id: motion_on
+  - trigger: motion.cleared
+    target:
+      device_id: [DEVICE_ID_BEWEGUNGSMELDER_GANG]
+    options:
+      behavior: each
       for:
-        seconds: 1
-  conditions:
-    - condition: sun
-      after: sunset
-      after_offset: '-01:00:00'
-      before: sunrise
-      before_offset: '01:00:00'
-    - condition: numeric_state
-      entity_id: sensor.illuminance_sensor_bathroom
-      below: 30
-  actions:
-    - action: switch.turn_on
-      target:
-        entity_id: switch.bathroom_light_switch
-  mode: single
-
-- id: 'badezimmer_licht_aus_bewegung'
-  alias: 'Badezimmer - Licht automatisch AUS'
-  description: 'Schaltet Licht nach 30 Sekunden ohne Präsenz aus.'
-  triggers:
-    - trigger: state
-      entity_id: binary_sensor.presence_sensor_bathroom
-      to: 'off'
-      for:
+        hours: 0
+        minutes: 0
         seconds: 30
-  actions:
-    - action: switch.turn_off
-      target:
-        entity_id: switch.bathroom_light_switch
-  mode: single
-
-# ==============================================================================
-# AUTOMATION 4: Flur / Gang Beleuchtung
-# ==============================================================================
-- id: 'flur_licht_an_bewegung'
-  alias: 'Flur - Licht automatisch AN'
-  description: 'Schaltet Licht im Flur nach Sonnenuntergang bei Präsenz ein.'
-  triggers:
-    - trigger: state
-      entity_id: binary_sensor.presence_sensor_hallway
-      to: 'on'
-  conditions:
-    - condition: sun
-      after: sunset
-      after_offset: '-01:00:00'
-      before: sunrise
-      before_offset: '-01:00:00'
-  actions:
-    - action: switch.turn_on
-      target:
-        entity_id: switch.hallway_light_switch
-  mode: single
-
-- id: 'flur_licht_aus_bewegung'
-  alias: 'Flur - Licht automatisch AUS'
-  description: 'Schaltet Flurlicht nach 30 Sekunden Inaktivität aus.'
-  triggers:
-    - trigger: state
-      entity_id: binary_sensor.presence_sensor_hallway
-      to: 'off'
-      for:
-        seconds: 30
+    id: motion_off
   conditions: []
   actions:
-    - action: switch.turn_off
-      target:
-        entity_id: switch.hallway_light_switch
+  - choose:
+    # --- OPTION 1: Einschalten ---
+    - conditions:
+      - condition: trigger
+        id:
+        - motion_on
+      - condition: sun.is_set # Licht wird nur geschaltet, wenn die Sonne untergegangen ist
+        options: {}
+      sequence:
+      - action: switch.turn_on
+        metadata: {}
+        target:
+          device_id: [DEVICE_ID_LICHTSCHALTER_GANG]
+        data: {}
+    # --- OPTION 2: Ausschalten ---
+    - conditions:
+      - condition: trigger
+        id:
+        - motion_off
+      sequence:
+      - action: switch.turn_off
+        metadata: {}
+        target:
+          device_id: [DEVICE_ID_LICHTSCHALTER_GANG]
+        data: {}
+  mode: single
+
+# ==============================================================================
+# WALLPANEL SMART CHARGING
+# Akkuschonende Ladesteuerung für das Wand-Tablet. 
+# Hält die Ladung zwischen 20% und 80%, um die Lebensdauer des Akkus zu maximieren.
+# ==============================================================================
+- id: 'wallpanel_ladeautomatik'
+  alias: Wallpanel_Ladeautomatik
+  description: 'Smart Charging für Dashboard-Tablet (20-80%)'
+  triggers:
+  # --- Ladevorgang starten ---
+  - trigger: numeric_state
+    entity_id:
+    - sensor.fire_tablet_batterie
+    below: 20
+    id: charge_start
+  # --- Ladevorgang stoppen ---
+  - trigger: numeric_state
+    entity_id:
+    - sensor.fire_tablet_batterie
+    above: 80
+    id: charge_stop
+  conditions: []
+  actions:
+  - choose:
+    - conditions:
+      - condition: trigger
+        id:
+        - charge_start
+      sequence:
+      - action: switch.turn_on
+        metadata: {}
+        target:
+          device_id: [DEVICE_ID_STECKDOSE_TABLET]
+        data: {}
+    - conditions:
+      - condition: trigger
+        id:
+        - charge_stop
+      sequence:
+      - action: switch.turn_off
+        metadata: {}
+        target:
+          device_id: [DEVICE_ID_STECKDOSE_TABLET]
+        data: {}
   mode: single
