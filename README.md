@@ -20,50 +20,41 @@ Willkommen in meinem Repository für meine Home-Assistant-Infrastruktur. Hier do
 * **Netzwerk-Segmentierung:** Dedizierte VLANs für IoT-Geräte und Smart-Home-Komponenten
 
 ### 📊 Netzwerktopologie (Ist-Zustand)
-
 ```mermaid
 graph TD
-    classDef router fill:#2b5c8f,stroke:#fff,stroke-width:2px,color:#fff;
-    classDef switch fill:#1e7e34,stroke:#fff,stroke-width:2px,color:#fff;
-    classDef homelab fill:#d35400,stroke:#fff,stroke-width:1px,color:#fff;
-    classDef client fill:#2980b9,stroke:#fff,stroke-width:1px,color:#fff;
-    classDef smarthome fill:#8e44ad,stroke:#fff,stroke-width:1px,color:#fff;
-    classDef wireless_rf fill:#d35400,stroke:#fff,stroke-width:1px,color:#fff;
-
-    Internet((Internet)) <--> Router[ISP Router / Gateway<br/>192.168.x.1] ::: router
-    Router <--> Switch[Managed Switch / TP-Link Omada] ::: switch
-    Switch <--> AP[Wi-Fi 6 Access Point / TP-Link EAP650] ::: switch
+    Router[ISP Router / Gateway] <--> Switch[Managed Switch / TP-Link Omada]
+    Switch <--> AP[Wi-Fi 6 Access Point / TP-Link EAP650]
 
     subgraph LAN ["Kabelgebundene Geräte (LAN Segment)"]
-        Switch --- HA[Home Assistant Host / Dell Wyse 5070] ::: homelab
-        HA --- Dongle[Zigbee / Matter USB Controller] ::: homelab
-        Switch --- HMIP_GW[Homematic IP Access Point] ::: homelab
-        Switch --- PC1[Workstation / Gaming PC] ::: client
-        Switch --- TV[Smart TV / Living Room] ::: client
+        Switch --- HA[Home Assistant Host / Dell Wyse 5070]
+        HA --- Dongle[Zigbee / Matter USB Controller]
+        Switch --- HMIP_GW[Homematic IP Access Point]
+        Switch --- PC1[Workstation / Gaming PC]
+        Switch --- TV[Smart TV / Living Room]
     end
 
     subgraph WLAN_Clients ["Wi-Fi Clients (2.4 / 5 GHz)"]
-        AP -.- Phone1[Primary Mobile] ::: client
-        AP -.- Phone2[Secondary Mobile] ::: client
-        AP -.- Tab1[Tablet Dashboard] ::: client
+        AP -.- Phone1[Primary Mobile]
+        AP -.- Phone2[Secondary Mobile]
+        AP -.- Tab1[Tablet Dashboard]
     end
 
     subgraph WLAN_IoT ["Wi-Fi Smart Home & IoT Devices"]
-        AP -.- FireHD[Wall Panel Dashboard / Fully Kiosk] ::: smarthome
-        AP -.- Nanoleaf[Nanoleaf Canvas / Lighting] ::: smarthome
-        AP -.- WiFiSwitches[Wi-Fi Light Switches] ::: smarthome
-        AP -.- Plugs[Smart Plugs & Sockets] ::: smarthome
-        AP -.- ESP[ESP8266 / ESP32 Microcontroller] ::: smarthome
-        AP -.- Tuya[Tuya / WZ-SPI RGBIC LED Strip Controllers] ::: smarthome
-        AP -.- Appliances[Smart Appliances / Humidifier, Washer] ::: smarthome
+        AP -.- FireHD[Wall Panel Dashboard / Fully Kiosk]
+        AP -.- Nanoleaf[Nanoleaf Canvas / Lighting]
+        AP -.- WiFiSwitches[Wi-Fi Light Switches]
+        AP -.- Plugs[Smart Plugs & Sockets]
+        AP -.- ESP[ESP8266 / ESP32 Microcontroller]
+        AP -.- Tuya[Tuya / WZ-SPI RGBIC LED Strip Controllers]
+        AP -.- Appliances[Smart Appliances / Humidifier, Washer]
     end
 
     subgraph Homematic_RF ["Homematic IP (868 MHz Funk)"]
-        HMIP_GW -.- Thermostats[Radiator Thermostats & Door Sensors] ::: wireless_rf
+        HMIP_GW -.- Thermostats[Radiator Thermostats & Door Sensors]
     end
 
     subgraph Zigbee_RF ["Zigbee Mesh (2.4 GHz)"]
-        Dongle -.- ZigbeeSensors[Motion & Temp Sensors, Smart Bulbs] ::: wireless_rf
+        Dongle -.- ZigbeeSensors[Motion & Temp Sensors, Smart Bulbs]
     end
 
 ## 🎛️ Integriertes Geräte-Ökosystem & Protokolle
